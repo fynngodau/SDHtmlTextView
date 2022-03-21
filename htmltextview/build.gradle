@@ -30,9 +30,6 @@ buildscript {
 repositories {
     google()
     mavenCentral()
-    maven {
-        url "http://repo.pageturner-reader.org"
-    }
 }
 
 android {
