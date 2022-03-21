@@ -1,9 +1,64 @@
-# SDHtmlTextView
-Inspired by:
-* HTMLTextView https://github.com/PrivacyApps/html-textview.
-* HTMLSpanner https://github.com/NightWhistler/HtmlSpanner.
+*The best HTML renderer I found.*
 
-SDHtmlTextView use HTMLSpanner to display properly in TextViews an html page, overriding Html.fromHtml() and handling some CSS style inline properties.
+It is forked to be included as a submodule and does **not** include the `SDHtmlTextView` class that the upstream project provides. The reason is that you probably want to write your own `TextView` implementation that makes use of HTMLSpanner if you want to render images. Get inspired by [this one that I wrote for a project](https://codeberg.org/fynngodau/moodleDirect/src/branch/development/app/src/main/java/godau/fynn/moodledirect/view/ImageLoaderTextView.java).
+
+There appears to be a family of deveratives of some HTML spanner library, and this is the one I chose, because – even though its exact history is hard to make out – it appears to be **based on [NightWhistler/HtmlSpanner](https://github.com/NightWhistler/HtmlSpanner) with some improvements**.
+
+This library supports rendering tables.
+
+## Usage
+
+1. Add the library as a submodule  
+   `git submodule add https://github.com/fynngodau/SDHtmlTextView.git`
+2. Add the dependency to your app module's `build.gradle`:
+   `implementation 'it.sysdata.mobile:htmlspanner:+'`
+3. Substitute the dependency with your submodule in `settings.gradle`:
+   ```
+   includeBuild('SDHtmlTextView') {
+       dependencySubstitution {
+           substitute module('it.sysdata.mobile:htmlspanner') using project(':HtmlSpanner')
+       }
+   }
+   ```
+
+---
+
+This section is copied from upstream's README.
+
+4. Use HtmlSpanner in your TextView :
+
+In the xml layout file define a simple TextView then in the Activity do
+
+```java
+        String html=loadStringFromAssetFile(this,"example.html");
+        TextView tv = (TextView) findViewById(R.id.text);
+        int col=tv.getSolidColor();
+        HtmlSpanner htmlSpanner=new HtmlSpanner(tv.getCurrentTextColor(), tv.getTextSize());
+        htmlSpanner.setBackgroundColor(col);
+        tv.setText(htmlSpanner.fromHtml(html));
+```
+
+If you want to handle href you need to add
+```java
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+```
+
+You can alternatively use a builder to initialize the HtmlSpanner
+
+```java
+        HtmlSpanner htmlSpanner = new HtmlSpanner.Builder()
+                                    .textColor(tv.getCurrentTextColor())
+                                    .textSize(tv.getTextSize())
+                                    .backgroundColor(tv.getSolidColor())
+                                    .tableHeaderCenter(isTableHeaderCentered)
+                                    .build();
+```
+
+the builder possible parameters are:
+- `textColor`, this attribute is required since is used to initialize the htmlspanner with a custom text color;
+- `textSize`, this attribute is required since is used to initialize the htmlspanner with a custom text size;
+- `backgroundColor`, this attribute is required since is used to initialize the htmlspanner with a custom background color to handle html tags like "div" correctly;
+- `tableHeaderCenter`, if this attribute is set to false or true it will define the centering of the table header fields in tables, by default table header is centered.
 
 ### HTML Tags supported 
 
@@ -62,113 +117,6 @@ SDHtmlTextView use HTMLSpanner to display properly in TextViews an html page, ov
 * ``border-width``
 * ``border``
 * ``text-decoration`` only underline and line-through 
-
-## Usage
-1.￼ If you already have an implementation of TextView you could simply use HtmlSpanner, that wrap only the html code and convert it to a spannable string.
-
-1.1. **Add the library as a dependency**
-
-1.1.1 in **Project level `build.gradle`** add those repositories
-```gradle
-   maven { url  'https://dl.bintray.com/sysdata/maven' }
-   maven { url 'http://repo.pageturner-reader.org' }
-   mavenCentral()
-```
-1.1.2 in your **App level `build.gradle`** add this dependecy
-```gradle
-    implementation 'it.sysdata.mobile:htmlspanner:1.0.2'
-    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.16'
-```
-
-1.2 Use HtmlSpanner in your TextView :
-
-In the xml layout file define a simple TextView then in the Activity do
-
-```java
-        String html=loadStringFromAssetFile(this,"example.html");
-        TextView tv = (TextView) findViewById(R.id.text);
-        int col=tv.getSolidColor();
-        HtmlSpanner htmlSpanner=new HtmlSpanner(tv.getCurrentTextColor(), tv.getTextSize());
-        htmlSpanner.setBackgroundColor(col);
-        tv.setText(htmlSpanner.fromHtml(html));
-```
-
-If you want to handle href you need to add
-```java
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
-```
-
-You can alternatively use a builder to initialize the HtmlSpanner
-
-```java
-        HtmlSpanner htmlSpanner = new HtmlSpanner.Builder()
-                                    .textColor(tv.getCurrentTextColor())
-                                    .textSize(tv.getTextSize())
-                                    .backgroundColor(tv.getSolidColor())
-                                    .tableHeaderCenter(isTableHeaderCentered)
-                                    .build();
-```
-
-the builder possible parameters are:
-- textColor, this attribute is required since is used to initialize the htmlspanner with a custom text color;
-- textSize, this attribute is required since is used to initialize the htmlspanner with a custom text size;
-- backgroundColor, this attribute is required since is used to initialize the htmlspanner with a custom background color to handle html tags like "div" correctly;
-- tableHeaderCenter, if this attribute is set to false or true it will define the centering of the table header fields in tables, by default table header is centered.
-
-2.￼ Alternatively you can use an **SDHtmlTextView** which is a custom TextView that integrates HtmlSpanner to handle html texts :
-
-2.1 **Add the library as a dependency**
-
-2.1.1 in **Project level `build.gradle`** add those repositories
-```gradle
-   maven { url  'https://dl.bintray.com/sysdata/maven' }
-   maven { url 'http://repo.pageturner-reader.org' }
-   mavenCentral()
-```
-2.1.2 in your **App level `build.gradle`** add this dependecy
-```gradle
-    implementation 'it.sysdata.mobile:htmltextview:1.0.0'
-    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.16'
-```
-2.2 add the SDHtmlTextView via xml and then in your code set the html
-
-**kotlin:**
-
-```kotlin
-        String html=loadStringFromAssetFile(this,"example.html")
-        htmlTextView.htmlText = html
-```
-
-**java:**
-
-```java
-        String html=loadStringFromAssetFile(this,"example.html");
-        SDHtmlTextView htmlTextView = (SDHtmlTextView) findViewById(R.id.text);
-        htmlTextView.setHtmlText(html);
-```
-2.3 if you want to override html table header centering behaviour you need to add this attribute "tableHeaderCentered" you can add via xml
-
-```xml
-    <com.sysdata.kt.htmltextview.SDHtmlTextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:tableHeaderCentered="false"/>
-```
-
-or in the code in this way
-
-**kotlin:**
-
-```kotlin
-        textView.isTableHeaderCentered = false
-```
-
-**java:**
-
-```java
-        textView.setTableHeaderCentered(false)
-```
 
 ## License
 Copyright (C) 2017 Sysdata S.p.A.
