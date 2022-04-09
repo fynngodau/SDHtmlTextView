@@ -27,25 +27,4 @@ android {
     }
 }
 
-// pubblicazione maven
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-ext {
-    // GROUP_ID
-    publishedGroupId = group
-    // ARTIFACT_ID
-    artifact = 'htmlspanner'
-    // VERSION_ID
-    libraryVersion = version
-
-    developerId = 'sysdata-mobile'
-    developerName = ''
-    developerEmail = 'team.mobile@sysdata.it'
-
-    bintrayRepo = 'maven'
-    bintrayName = 'sdHtmlSpanner'
-    libraryName = 'htmlspanner'
-    bintrayOrganization = 'sysdata-mobile'
-}
-
 //apply from: 'publishArtifactory.gradle'
