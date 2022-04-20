@@ -27,7 +27,7 @@ public class HorizontalLineHandler extends WrappingStyleHandler {
     public void handleTagNode(TagNode node, SpannableStringBuilder builder, int start, int end,
                               Style useStyle, SpanStack spanStack) {
 
-        end+=1;
+        end+=2;
         Log.d("HorizontalLineHandler", "Draw hr from " + start + " to " + end);
         spanStack.pushSpan(new HorizontalLineSpan(useStyle), start, end);
         appendNewLine(builder);
@@ -36,5 +36,10 @@ public class HorizontalLineHandler extends WrappingStyleHandler {
 
     }
 
+    @Override
+    protected boolean appendNewLine(SpannableStringBuilder builder) {
+        builder.append(" \n");
+        return true;
+    }
 
 }
