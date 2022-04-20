@@ -106,7 +106,7 @@ public class HtmlSpanner {
      * If CSS colours are used
      */
     private boolean useColoursFromStyle = true;
-    private static Map<String, String> htmlTagsDictionary;
+    private static final Map<String, String> htmlTagsDictionary;
 
     static {
         htmlTagsDictionary = new LinkedHashMap<>();
@@ -483,7 +483,7 @@ public class HtmlSpanner {
     }
 
 
-    private static StyledTextHandler wrap( StyledTextHandler handler ) {
+    protected static StyledTextHandler wrap( StyledTextHandler handler ) {
         return new StyleAttributeHandler(new AlignmentAttributeHandler(handler));
     }
 

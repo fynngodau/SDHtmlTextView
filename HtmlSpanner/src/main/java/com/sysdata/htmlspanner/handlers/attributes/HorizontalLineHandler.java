@@ -29,7 +29,7 @@ public class HorizontalLineHandler extends WrappingStyleHandler {
 
         end+=1;
         Log.d("HorizontalLineHandler", "Draw hr from " + start + " to " + end);
-        spanStack.pushSpan(new HorizontalLineSpan(useStyle, start, end), start, end);
+        spanStack.pushSpan(new HorizontalLineSpan(useStyle), start, end);
         appendNewLine(builder);
 
         super.handleTagNode(node, builder, start, end, useStyle, spanStack);

@@ -19,15 +19,9 @@ import com.sysdata.htmlspanner.style.StyleValue;
  */
 public class HorizontalLineSpan implements LineBackgroundSpan {
 
-    private int start;
-    private int end;
+    private final Style style;
 
-    private Style style;
-
-    public HorizontalLineSpan(Style style, int start, int end) {
-        this.start = start;
-        this.end = end;
-
+    public HorizontalLineSpan(Style style) {
         this.style = style;
     }
 
@@ -65,7 +59,7 @@ public class HorizontalLineSpan implements LineBackgroundSpan {
         float originalStrokeWidth = p.getStrokeWidth();
         Paint.Style originalStyle = p.getStyle();
 
-        p.setColor(Color.parseColor("#000000"));
+        p.setColor(Color.GRAY);
         if (style.getBorderColor() != null ) {
             p.setColor( style.getBorderColor() );
         }
