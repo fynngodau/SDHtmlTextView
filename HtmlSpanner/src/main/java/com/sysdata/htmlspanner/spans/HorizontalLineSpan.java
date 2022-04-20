@@ -60,8 +60,10 @@ public class HorizontalLineSpan implements LineBackgroundSpan {
             left = left + baseMargin;
         }
 
+        // Copy values for later resetting
         int originalColor = p.getColor();
         float originalStrokeWidth = p.getStrokeWidth();
+        Paint.Style originalStyle = p.getStyle();
 
         p.setColor(Color.parseColor("#000000"));
         if (style.getBorderColor() != null ) {
@@ -88,6 +90,7 @@ public class HorizontalLineSpan implements LineBackgroundSpan {
 
         p.setColor(originalColor);
         p.setStrokeWidth(originalStrokeWidth);
+        p.setStyle(originalStyle);
     }
 
 
